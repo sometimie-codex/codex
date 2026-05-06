@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Alt Futures Squeeze Strategy Dashboard</title>
+    <meta
+      name="description"
+      content="Coinalyze, Coinglass, 거래소 선물 데이터를 활용한 알트코인 선물 스퀴즈 전략 웹 대시보드"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <nav class="topbar" aria-label="주요 탐색">
+        <a class="brand" href="#top" aria-label="대시보드 홈">
+          <span class="brand-mark">A++</span>
+          <span>Alt Squeeze Lab</span>
+        </a>
+        <div class="nav-links">
+          <a href="#regime">Market Regime</a>
+          <a href="#filters">Filters</a>
+          <a href="#entry">Entry</a>
+          <a href="#risk">Risk/TP</a>
+          <a href="#alert">Alert</a>
+        </div>
+      </nav>
+
+      <section id="top" class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Long-first · Bi-directional · Pullback-reactive</p>
+          <h1>알트코인 선물 스퀴즈 전략 대시보드</h1>
+          <p class="hero-lead">
+            Coinalyze / Coinglass / 거래소 선물 데이터를 조합해 월 20~40회 수준의
+            고선별 후보를 만들고, 시장 상태에 따라 필터 강도와 리스크를 자동 조절합니다.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#workflow">운영 흐름 보기</a>
+            <a class="button ghost" href="#alert">텔레그램 알림 형식</a>
+          </div>
+        </div>
+
+        <aside class="hero-panel" aria-label="핵심 원칙">
+          <div class="metric-card hot">
+            <span class="metric-label">목표 거래 빈도</span>
+            <strong>월 20~40회</strong>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">기본 레버리지</span>
+            <strong>5x</strong>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">기본 실행 모드</span>
+            <strong>Long 우선</strong>
+          </div>
+          <div class="metric-card danger">
+            <span class="metric-label">1회 손실 상한</span>
+            <strong>Seed -5% 이하</strong>
+          </div>
+        </aside>
+      </section>
+    </header>
+
+    <main>
+      <section class="section compact" aria-labelledby="principles-title">
+        <div class="section-heading">
+          <p class="eyebrow">Core Rules</p>
+          <h2 id="principles-title">점수 높은 종목을 추격하지 않고, 좋은 눌림만 기다립니다.</h2>
+        </div>
+        <div class="principle-grid">
+          <article>
+            <span>01</span>
+            <h3>80점 이상은 매수 버튼이 아님</h3>
+            <p>강한 후보/알림/보유 관리 구간이며, 신규 진입은 눌림과 15M 트리거를 확인합니다.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>최적 진입은 70~79점</h3>
+            <p>Broad는 넓게, Main은 압축하고, 70~79점에서 좋은 눌림이 나오면 진입 우선순위가 높습니다.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Red에서만 완전 중단</h3>
+            <p>Green은 적극, Yellow는 선별, Orange는 초저위험, Red는 신규 진입 금지로 운용합니다.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="regime" class="section" aria-labelledby="regime-title">
+        <div class="section-heading">
+          <p class="eyebrow">Market Regime Filter</p>
+          <h2 id="regime-title">좋은 장만 매매하지 않고, 장 상태별로 강도를 바꿉니다.</h2>
+        </div>
+        <div class="regime-grid">
+          <article class="regime-card green">
+            <div class="card-head"><h3>Green</h3><span>Normal</span></div>
+            <p>BTC 1H/4H 구조 양호, USDT.D 안정, 알트 순환매 가능.</p>
+            <ul>
+              <li>Broad / Main / A++ 정상 작동</li>
+              <li>70~74점 소액 1차 가능</li>
+              <li>TP2/TP3/러너 적극</li>
+            </ul>
+            <strong>Main -1.0% · A++ -3.0%</strong>
+          </article>
+          <article class="regime-card yellow">
+            <div class="card-head"><h3>Yellow</h3><span>Selective</span></div>
+            <p>BTC 횡보/약한 하락, 시장은 애매하지만 개별 종목 OI가 살아있음.</p>
+            <ul>
+              <li>Broad는 관찰만</li>
+              <li>75점 이상 + 좋은 눌림</li>
+              <li>TP1 빠르게, BE 우선</li>
+            </ul>
+            <strong>Main -0.75~1.0% · A++ -2.0%</strong>
+          </article>
+          <article class="regime-card orange">
+            <div class="card-head"><h3>Orange</h3><span>Ultra low risk</span></div>
+            <p>시장 약세지만 특정 종목의 숏 과열/음펀비/강한 지지가 존재.</p>
+            <ul>
+              <li>일반 롱 금지</li>
+              <li>A++ 롱만 초저위험</li>
+              <li>숏 후보도 초저위험</li>
+            </ul>
+            <strong>A++/Short -0.5~1.0%</strong>
+          </article>
+          <article class="regime-card red">
+            <div class="card-head"><h3>Red</h3><span>No entry</span></div>
+            <p>BTC 급락 + OI 급증, 디레버리징, 호가 붕괴, 극단 변동.</p>
+            <ul>
+              <li>신규 진입 금지</li>
+              <li>자동매매 OFF</li>
+              <li>기존 포지션 관리만</li>
+            </ul>
+            <strong>Risk: 신규 진입 없음</strong>
+          </article>
+        </div>
+      </section>
+
+      <section id="filters" class="section surface" aria-labelledby="filters-title">
+        <div class="section-heading">
+          <p class="eyebrow">Four-stage Filter</p>
+          <h2 id="filters-title">넓게 포착하고, 엄격하게 압축합니다.</h2>
+        </div>
+        <div class="filter-layout">
+          <div class="filter-tabs" role="tablist" aria-label="필터 선택">
+            <button class="tab active" type="button" data-tab="broad" role="tab" aria-selected="true">Broad Radar</button>
+            <button class="tab" type="button" data-tab="main" role="tab" aria-selected="false">Main Long</button>
+            <button class="tab" type="button" data-tab="aplus" role="tab" aria-selected="false">A++ Long</button>
+            <button class="tab" type="button" data-tab="short" role="tab" aria-selected="false">Short / Long Ban</button>
+          </div>
+          <div class="filter-panels">
+            <article class="filter-panel active" id="panel-broad" data-panel="broad">
+              <h3>Broad Radar Filter</h3>
+              <p>매수 신호가 아니라 관심 종목 등록 신호입니다. 차트와 눌림을 관찰합니다.</p>
+              <ul class="check-list">
+                <li>OI Chg 4H ≥ 2%</li>
+                <li>OI Chg 24H ≥ 5%</li>
+                <li>OI / MktCap ≥ 0.15%</li>
+                <li>Long 1H ≤ 52%</li>
+                <li>L/S Ratio 1D ≤ 1.05</li>
+              </ul>
+            </article>
+            <article class="filter-panel" id="panel-main" data-panel="main">
+              <h3>Main Long Squeeze Filter</h3>
+              <p>실제 롱 매매 후보를 압축하는 핵심 필터입니다.</p>
+              <ul class="check-list">
+                <li>OI Chg 4H ≥ 3%</li>
+                <li>OI Chg 24H ≥ 8~10%</li>
+                <li>Long 1H ≤ 49%</li>
+                <li>L/S Ratio 1D ≤ 0.9</li>
+                <li>FR AVG ≤ 0</li>
+              </ul>
+            </article>
+            <article class="filter-panel" id="panel-aplus" data-panel="aplus">
+              <h3>A++ Long Squeeze Filter</h3>
+              <p>강한 후보/우선순위/러너 후보입니다. 추격매수 신호가 아니라 눌림 대기 신호입니다.</p>
+              <ul class="check-list">
+                <li>OI Chg 4H ≥ 5%</li>
+                <li>OI Chg 24H ≥ 15%</li>
+                <li>OI / MktCap ≥ 0.3%</li>
+                <li>Long 1H ≤ 46~48%</li>
+                <li>Net Long 증가 + FR AVG &lt; 0</li>
+              </ul>
+            </article>
+            <article class="filter-panel" id="panel-short" data-panel="short">
+              <h3>Short / Long Ban Filter</h3>
+              <p>숏 후보를 찾거나, 롱 우선 운용에서 위험한 신규 롱을 차단합니다.</p>
+              <ul class="check-list">
+                <li>OI Chg 4H ≥ 3%</li>
+                <li>Long 1H ≥ 55~60%</li>
+                <li>L/S Ratio 1D ≥ 1.2</li>
+                <li>FR AVG &gt; 0</li>
+                <li>상단 BSL / OB / FVG 저항 중첩</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="score-title">
+        <div class="section-heading">
+          <p class="eyebrow">Score Bands</p>
+          <h2 id="score-title">점수 구간은 진입 버튼이 아니라 행동 지침입니다.</h2>
+        </div>
+        <div class="score-track" aria-label="점수 구간">
+          <div class="score-item muted"><strong>0~59</strong><span>Ignore</span></div>
+          <div class="score-item"><strong>60~69</strong><span>Radar</span></div>
+          <div class="score-item"><strong>70~74</strong><span>Early Main</span></div>
+          <div class="score-item active"><strong>75~79</strong><span>Main Entry</span></div>
+          <div class="score-item strong"><strong>80~87</strong><span>Strong / No chase</span></div>
+          <div class="score-item danger"><strong>88+</strong><span>Overheat</span></div>
+        </div>
+      </section>
+
+      <section id="entry" class="section split" aria-labelledby="entry-title">
+        <div class="section-heading sticky-heading">
+          <p class="eyebrow">Pullback Engine v1</p>
+          <h2 id="entry-title">1H가 자리를 만들고, 15M이 타이밍을 줍니다.</h2>
+          <p>자동매매 v1은 1H OTE, VWAP 지지, 돌파구간 리테스트를 핵심 기준으로 사용합니다.</p>
+        </div>
+        <div class="stack">
+          <article class="step-card">
+            <span class="step-number">1H</span>
+            <h3>Pullback Score</h3>
+            <ul>
+              <li>1H OTE 0.618~0.786</li>
+              <li>VWAP line 또는 Band#1 지지</li>
+              <li>이전 1H 저항 돌파 후 지지 전환</li>
+              <li>핵심 기준 2개 이상: 일반 진입 가능</li>
+              <li>핵심 기준 3개: A급 눌림</li>
+            </ul>
+          </article>
+          <article class="step-card">
+            <span class="step-number">15M</span>
+            <h3>Trigger</h3>
+            <ul>
+              <li>눌림 터치 후 15M 종가 회복</li>
+              <li>긴 아랫꼬리 또는 직전 고점 돌파</li>
+              <li>거래량 증가, OI 유지/재증가</li>
+              <li>VWAP 또는 MSB flip level 재회복</li>
+              <li>기본 1개 이상, A급 2개 이상</li>
+            </ul>
+          </article>
+          <article class="step-card highlight">
+            <span class="step-number">Entry</span>
+            <h3>3분할 진입</h3>
+            <div class="allocation">
+              <span style="--w:30%">1차 30%</span>
+              <span style="--w:40%">2차 40%</span>
+              <span style="--w:30%">3차 30%</span>
+            </div>
+            <p>1차 후 구조가 깨지면 2차/3차 추가진입은 금지합니다.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="risk" class="section surface" aria-labelledby="risk-title">
+        <div class="section-heading">
+          <p class="eyebrow">Risk · SL · TP</p>
+          <h2 id="risk-title">TP1에서 리스크를 제거하고, TP2/TP3/러너로 수익을 확장합니다.</h2>
+        </div>
+        <div class="risk-grid">
+          <article>
+            <h3>Risk Guard</h3>
+            <ul class="check-list">
+              <li>Daily -4%: 신규 진입 중단</li>
+              <li>Daily -6%: 전체 매매 중단</li>
+              <li>Weekly -8%: 리스크 절반 축소</li>
+              <li>Weekly -12%: 해당 주 신규 진입 중단</li>
+              <li>단일 거래 손실은 항상 Seed -5% 이하</li>
+            </ul>
+          </article>
+          <article>
+            <h3>Structure SL</h3>
+            <ul class="check-list">
+              <li>롱: 눌림구간 최저점 이탈</li>
+              <li>롱: VWAP / OTE / Retest 지지 실패</li>
+              <li>숏: 저항구간 상단 돌파 및 안착</li>
+              <li>구조가 애매하면 0.5~1 ATR 보정</li>
+              <li>손절 후 같은 자리 즉시 재진입 금지</li>
+            </ul>
+          </article>
+          <article>
+            <h3>TP Ladder</h3>
+            <ul class="check-list">
+              <li>TP1: +1R 또는 최근 1H 스윙, 30% 익절</li>
+              <li>TP1 후 SL을 BE 또는 손실 최소 구간 이동</li>
+              <li>TP2: +2R 또는 1H Weak High, 40% 익절</li>
+              <li>TP3: +3R 이상 또는 4H Weak High</li>
+              <li>러너는 데이터 구조가 살아 있을 때만 유지</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="workflow" class="section" aria-labelledby="workflow-title">
+        <div class="section-heading">
+          <p class="eyebrow">Automation Flow</p>
+          <h2 id="workflow-title">스캔부터 알림까지 12단계로 실행합니다.</h2>
+        </div>
+        <ol class="timeline">
+          <li>전 종목 스캔</li>
+          <li>Market Regime 판정</li>
+          <li>Broad / Main / A++ / Short-Ban 분류</li>
+          <li>유동성 / 스프레드 필터 확인</li>
+          <li>스퀴즈 점수 계산</li>
+          <li>점수 구간 판정</li>
+          <li>1H Pullback Engine 계산</li>
+          <li>15M Trigger 확인</li>
+          <li>진입 등급 결정</li>
+          <li>3분할 진입 계획 생성</li>
+          <li>SL / TP1 / TP2 / TP3 계산</li>
+          <li>텔레그램 알림 발송</li>
+        </ol>
+      </section>
+
+      <section id="alert" class="section split alert-section" aria-labelledby="alert-title">
+        <div class="section-heading sticky-heading">
+          <p class="eyebrow">Output Preview</p>
+          <h2 id="alert-title">분석 요청과 알림은 바로 실행 가능한 형식으로 보여줍니다.</h2>
+          <p>상태는 관찰 / 진입대기 / 진입가능 / 과열주의 / 롱금지 / Red 진입금지 중 하나로 표시합니다.</p>
+        </div>
+        <article class="telegram-card" aria-label="텔레그램 알림 예시">
+          <div class="telegram-top"><span>Telegram Alert</span><strong>Long Candidate</strong></div>
+          <pre><code>티커: XXXUSDT
+방향: Long
+Market Regime: Yellow
+등급: Main Long Squeeze
+점수: 76점
+상태: 눌림 대기
+
+데이터:
+- OI 4H 증가
+- Long 1H 감소
+- L/S Ratio 1D 하락
+- FR AVG 음수
+- Net Long 증가
+
+Entry:
+- Pullback Score 2 이상
+- 15M 종가 회복 또는 아랫꼬리 확인 시 1차
+
+SL:
+- 눌림구간 최저점 이탈
+
+TP:
+- TP1: +1R / 최근 1H 고점
+- TP2: +2R / 1H Weak High
+- TP3: 시장모드에 따라 러너 축소 또는 유지
+
+결론:
+추격하지 말고 눌림 확인 후 소액 진입.</code></pre>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Alt Squeeze Lab · Strategy Blueprint v1 · Python/server 없이 index.html 직접 열기 가능</p>
+      <a href="#top">맨 위로</a>
+    </footer>
+
+    <script src="assets/app.js"></script>
+  </body>
+</html>
